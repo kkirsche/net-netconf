@@ -30,14 +30,6 @@ module Netconf
         @trans.rpc_exec(rpc)
       end
 
-      def nokogiri_case(arg)
-        filter = case arg
-                 when Nokogiri::XML::Builder  then arg.doc.root
-                 when Nokogiri::XML::Document then arg.root
-                 else arg
-                 end
-      end
-
       def get_configuration(*args)
         filter = nil
 
@@ -163,6 +155,17 @@ module Netconf
         reply = load_configuration(rollback: n)
         !reply.xpath('//ok').empty? # return true or false to indicate success or not
       end
+
+      private
+
+      def nokogiri_case(arg)
+        filter = case arg
+                 when Nokogiri::XML::Builder  then arg.doc.root
+                 when Nokogiri::XML::Document then arg.root
+                 else arg
+                 end
+      end
+
     end # module: JUNOS
   end # module: RPC
 end # module: Netconf
