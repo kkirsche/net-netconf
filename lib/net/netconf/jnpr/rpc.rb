@@ -157,6 +157,12 @@ module Netconf
         end
         @trans.rpc_exec(rpc_nx)
       end
+
+      def rollback(n = 0)
+        ArgumentError "rollback between 0 and 49 only" unless n.between?(0,49)
+        reply = load_configuration(rollback: n)
+        !reply.xpath('//ok').empty? # return true or false to indicate success or not
+      end
     end # module: JUNOS
   end # module: RPC
 end # module: Netconf
