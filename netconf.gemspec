@@ -13,6 +13,6 @@ Gem::Specification.new do |s|
   s.files = FileList['lib/net/**/*.rb', 'examples/**/*.rb']
   s.license = 'BSD 2'
   s.add_dependency('nokogiri', '~> 1.6')
-  s.add_dependency('net-ssh', '~> 2.9')
+  s.add_dependency('net-ssh', '>= 2.9', '< 3.3')
   s.add_dependency('net-scp', '~> 1.2')
 end
