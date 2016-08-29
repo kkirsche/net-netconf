@@ -19,7 +19,7 @@ module Netconf
       # autogenerate an <rpc>, converting underscores (_)
       # to hyphens (-) along the way ...
 
-      def Builder.method_missing( method, params = nil, attrs = nil )
+      def Builder.method_missing( method, params = nil, attrs = nil, &block )
 
         rpc_name = method.to_s.tr('_','-').to_sym
 
@@ -38,6 +38,12 @@ module Netconf
         else
           # -- no params
           rpc_nx = Nokogiri::XML("<rpc><#{rpc_name}/></rpc>").root
+
+          if block
+            Nokogiri::XML::Builder.with( rpc_nx.at( rpc_name )){ |xml|
+              block.call( xml )
+            }
+          end
         end
 
         # if a block is given it is used to set the attributes of the toplevel element
@@ -61,8 +67,8 @@ module Netconf
         end
       end
 
-      def method_missing( method, params = nil, attrs = nil )
-        @trans.rpc_exec( Netconf::RPC::Builder.send( method, params, attrs ))
+      def method_missing( method, params = nil, attrs = nil , &block )
+        @trans.rpc_exec( Netconf::RPC::Builder.send( method, params, attrs , &block ))
       end
     end # class: Executor
 
